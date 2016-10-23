@@ -1,0 +1,37 @@
+{
+  "name": "baconify",
+  "version": "0.0.0",
+  "description": "Functional Reactive State Management",
+  "main": "lib/baconify.js",
+  "scripts": {
+    "clean": "rm -rf lib/",
+    "build": "webpack -p --progress --colors",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fknussel/baconify.git"
+  },
+  "author": {
+    "name": "Federico Knüssel",
+    "email": "fknussel@gmail.com"
+  },
+  "keywords": [
+    "baconify"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fknussel/baconify/issues"
+  },
+  "homepage": "https://github.com/fknussel/baconify#readme",
+  "devDependencies": {
+    "babel-core": "^6.17.0",
+    "babel-loader": "^6.2.5",
+    "babel-preset-es2015": "^6.16.0",
+    "baconjs": "^0.7.88",
+    "eslint": "^3.8.1",
+    "eslint-loader": "^1.6.0",
+    "lodash": "^4.16.4",
+    "webpack": "^1.13.2"
+  }
+}
