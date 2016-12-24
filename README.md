@@ -1,10 +1,18 @@
 # baconify
 
-Reactive state management using [Bacon.js](http://baconjs.github.io/).
+Reactive state management using [Bacon.js](http://baconjs.github.io/) 🔥
 
-## TL;DR: Usage Example
+## Installation
 
-Have a look at this [example](https://github.com/fknussel/baconify-example).
+```
+npm install --save-dev baconify
+```
+
+Then just either import the main `baconify` function, the `store` (controlling bus), or both (depending what you need on each file).
+
+```
+import baconify, {store} from 'baconify';
+```
 
 ## Motivation and Proposed Architecture
 
@@ -23,15 +31,13 @@ This makes the data flow super simple:
 
 The fundamental idea behind this approach is that every user-triggered action gets pushed to the appropriate event stream, which is then merged in to the **application state** stream. Events take place at different points in time, and they cause the application state to change. Finally the updated state triggers a re-render of the root component, and React's virtual DOM takes care of the rest :tada: This results in **dead simple, dumb** React views.
 
+## TL;DR: Usage Example
+
+Have a look at this [example](https://github.com/fknussel/baconify-example).
+
 ## Quick Start Guide
 
-First grab the library here: https://www.npmjs.com/package/baconify
-
-```
-npm install --save-dev baconify
-```
-
-1) Define your **action types**:
+### 1) Define your **action types**
 
 ```js
 export const SHOW_SPINNER = 'SHOW_SPINNER';
@@ -39,7 +45,7 @@ export const SHOW_SPINNER = 'SHOW_SPINNER';
 
 I usually define all actions within a single file for convenience.
 
-2) Create your **reducers**:
+### 2) Create your **reducers**
 
 **Reducers are pure functions** that derive the next application state for a particular action, based on the current state. The first parameter reducers take is always the current state for the app, whereas the rest of the arguments are whatever payload your reducer needs and you pass on to them.
 
@@ -57,7 +63,7 @@ export default {
 }
 ```
 
-3) Define your **initial state**:
+### 3) Define your **initial state**
 
 ```js
 const initialState = {
@@ -65,7 +71,7 @@ const initialState = {
 };
 ```
 
-4) Initialise your application state:
+### 4) Initialise your application state
 
 ```js
 baconify(initialState, reducers, (props) => {
@@ -88,7 +94,7 @@ export function getUserDetails() {
   const ajaxCall = fetch('//api.github.com/users/fknussel')
     .then((response) => response.json());
 
-  const postDetailsStream = Bacon
+  const userDetailsStream = Bacon
     .fromPromise(ajaxCall)
     .onValue((user) => {
       store.push(GET_USER_DETAILS, user); // triggers an action
@@ -108,6 +114,6 @@ export function getUserDetails() {
 
 ## Complementary Readings, Inspiration and Credits
 
-* https://medium.com/@milankinen/good-bye-flux-welcome-bacon-rx-23c71abfb1a7
-* http://blog.hertzen.com/post/102991359167/flux-inspired-reactive-data-flow-using-react-and
-* http://www.aryweb.nl/2015/02/16/Reactive-React-using-reactive-streams/
+I've first used a somewhat similar architecture while at [Fox Sports Australia](https://github.com/FoxSportsAustralia/) and it made perfect sense. This was probably before or at the same time [Redux](http://redux.js.org/) and [MobX](https://mobxjs.github.io/) became popular.
+
+[Matti Lankinen](https://github.com/milankinen) proposes the same idea on his [article on Medium](https://medium.com/@milankinen/good-bye-flux-welcome-bacon-rx-23c71abfb1a7). I've made tweaks and enhancements to this library after some of his comments and ideas.
