@@ -19,7 +19,7 @@ import baconify, {Store} from 'baconify';
 Just a lil bit of context first *re: functional reactive programming*. The most fundamental concept of [Functional Reactive Programming (FRP)](http://en.wikipedia.org/wiki/Functional_reactive_programming) is the **event stream**. Streams are like (immutable) arrays of events: they can be mapped, 
 filtered, merged and combined. The difference between arrays and event streams is that values (events) of the event stream occur asynchronously. Every time an event occurs, it gets propagated through the stream and finally gets consumed by the subscriber.
 
-We have Flux (and implementations like Redux) to handle our app state, and in fact they do a great job abstracting our views from the *business logic* and keeping our **data flow unidirectional**. However, Reactive programming is what React was made for. So, what if we delegate the app state handling to FRP libraries like Bacon.js or RxJS instead of using Redux? Well, that actually makes a lot of sense: 
+We have [Flux](https://facebook.github.io/flux/) (and other implementations such as [Redux](http://redux.js.org/) and [MobX](https://mobxjs.github.io/)) to handle our app state, and in fact they do a great job abstracting our views from the *business logic* and keeping our **data flow unidirectional**. However, Reactive programming is what React was made for. So, what if we delegate the app state handling to FRP libraries like [Bacon.js](http://baconjs.github.io/) or [RxJS](http://reactivex.io/rxjs/) instead of using Redux? Well, that actually makes a lot of sense: 
 
 1. Actions happen eventually and they propagate through event streams.
 2. The combination of these event streams result in the app's state.
@@ -47,9 +47,9 @@ I usually define all actions within a single file for convenience.
 
 ### 2) Create your **reducers**
 
-**Reducers are pure functions** that derive the next application state for a particular action, based on the current state. The first parameter reducers take is always the current state for the app, whereas the rest of the arguments are whatever payload your reducer needs and you pass on to them.
+**Reducers are pure functions** that derive the next application state for a particular action, based on the current state and the payload the action provides. The first parameter reducers take is always the current state for the app, whereas the rest of the arguments are whatever data your reducer needs and you pass on to them.
 
-**Reducers and action types have a 1:1 relationship.** This library needs you to name your reducers after the action type they are bound to:
+**Reducers and action types have a 1:1 relationship.** You need to name your reducers after the action type they are bound to ⚠️ -- this is the only style convention this library has.
 
 ```js
 export default {
@@ -60,6 +60,15 @@ export default {
   [HIDE_SPINNER]: (state) => {
     return assign({}, state, { loading: false });
   }
+}
+```
+
+Of course reducers don't need to be inline functions, you can define them elsewhere and then bind them together in the format Baconify needs them to be, something in the lines of this chunk of code... But this is totally up to you and depends on your preferred code style.
+
+```js
+export default {
+  [SHOW_SPINNER]: showSpinnerReducer,
+  [HIDE_SPINNER]: hideSpinnerReducer
 }
 ```
 
@@ -87,11 +96,13 @@ baconify(initialState, store, reducers, (props) => {
 
 ## About Side Effects
 
-Side effects allow your application to interact with the outside world, i.e.: fetching data from an API, getting/setting data from/to `localStorage`/`sessionStorage`, etc.
+Side effects allow your application to interact with the outside world, i.e.: fetching data from an API, getting/setting data from/to `localStorage`/`sessionStorage`, talking to a database, etc.
 
 Unlike reducers, effects are **not** pure functions.
 
-Naturally effects may (and usually do) trigger actions to update the application state based on the results of talking to the outside world.
+Naturally effects may (and most usually do) trigger actions to update the application state once they are done making asynchronous operations.
+
+For instance, consider this effect called `getUserDetails` that fetches a list of users from an API. Provided the Ajax request completes successfully, the effect will trigger the `RECEIVE_USER_DETAILS` action which simply updates the application state with those user details. This allows for a separation of concerns between hitting an API and updating the app state.
 
 ```js
 export function getUserDetails() {
@@ -123,8 +134,3 @@ export function getUserDetails() {
 I've first used a somewhat similar architecture while at [Fox Sports Australia](https://github.com/FoxSportsAustralia/) and it made perfect sense. This was probably before or at the same time [Redux](http://redux.js.org/) and [MobX](https://mobxjs.github.io/) became popular.
 
 [Matti Lankinen](https://github.com/milankinen) proposes the same idea on his [article on Medium](https://medium.com/@milankinen/good-bye-flux-welcome-bacon-rx-23c71abfb1a7). I've made tweaks and enhancements to this library after some of his comments and ideas.
-
-I've also found a bunch of other posts touching on this approach, here are some of them:
-
-* http://www.aryweb.nl/2015/02/16/Reactive-React-using-reactive-streams/
-* http://blog.hertzen.com/post/102991359167/flux-inspired-reactive-data-flow-using-react-and
