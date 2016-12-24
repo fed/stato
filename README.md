@@ -17,7 +17,7 @@ We have Flux (and implementations like Redux) to handle our app state, and in fa
 2. The combination of these event streams result in the app's state.
 3. After an event has propagated through the system, the new state is consumed by the subscriber and rendered by the **root level** React component.
 
-This makes the data flow dead simple:
+This makes the data flow super simple:
 
 ![Application Architecture](http://i.imgur.com/57PHNjS.png)
 
@@ -53,7 +53,7 @@ export default {
 
   [HIDE_SPINNER]: (state) => {
     return assign({}, state, { loading: false });
-  },
+  }
 }
 ```
 
@@ -82,20 +82,17 @@ Unlike reducers, effects are **not** pure functions.
 Naturally effects may (and usually do) trigger actions to update the application state.
 
 ```js
-export function loadPosts() {
-  store.push(SHOW_SPINNER); // trigger an action
+export function getUserDetails() {
+  store.push(SHOW_SPINNER); // triggers an action
+  
+  const ajaxCall = fetch('//api.github.com/users/fknussel')
+    .then((response) => response.json());
 
-  fetch(ENDPOINT_LIST_POSTS)
-    .then((response) => response.json())
-    .then((response) => {
-      const {posts} = response;
-
-      store.push(UPDATE_POSTS_LIST, posts); // trigger an action
-      store.push(HIDE_SPINNER); // trigger an action
-    })
-    .catch((error) => {
-      store.push(HIDE_SPINNER);
-      store.push(SHOW_ALERT, `Oops! 🙁 ${error}`);
+  const postDetailsStream = Bacon
+    .fromPromise(ajaxCall)
+    .onValue((user) => {
+      store.push(GET_USER_DETAILS, user); // triggers an action
+      store.push(HIDE_SPINNER); // triggers an action
     });
 }
 ```
