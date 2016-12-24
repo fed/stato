@@ -8,10 +8,10 @@ Reactive state management using [Bacon.js](http://baconjs.github.io/) 🔥
 npm install --save-dev baconify
 ```
 
-Then just either import the main `baconify` function, the `store` (controlling bus), or both (depending what you need on each file).
+Then just either import the main `baconify` function, the `Store` class (controlling bus you need to instantiate), or both (depending what you need on each file).
 
 ```
-import baconify, {store} from 'baconify';
+import baconify, {Store} from 'baconify';
 ```
 
 ## Motivation and Proposed Architecture
@@ -27,9 +27,9 @@ We have Flux (and implementations like Redux) to handle our app state, and in fa
 
 This makes the data flow super simple:
 
-![Application Architecture](http://i.imgur.com/57PHNjS.png)
+![Application Architecture](http://i.imgur.com/ButOsvf.png)
 
-The fundamental idea behind this approach is that every user-triggered action gets pushed to the appropriate event stream, which is then merged in to the **application state** stream. Events take place at different points in time, and they cause the application state to change. Finally the updated state triggers a re-render of the root component, and React's virtual DOM takes care of the rest :tada: This results in **dead simple, dumb** React views.
+The fundamental idea behind this approach is that every user-triggered action gets pushed to the appropriate event stream, which is then merged in to the **application state** stream. Events take place at different points in time, and they cause the application state to change. Finally the updated state triggers a re-render of the root component, and React's virtual DOM takes care of the rest :tada: This results in **dead simple, dumb** React views, mostly powered by **[stateless functional components](https://facebook.github.io/react/docs/components-and-props.html#functional-and-class-components)** in favour of stateful class components (wherever possible).
 
 ## TL;DR: Usage Example
 
@@ -71,10 +71,16 @@ const initialState = {
 };
 ```
 
-### 4) Initialise your application state
+### 4) Instantiate your store
 
 ```js
-baconify(initialState, reducers, (props) => {
+const store = new Store();
+```
+
+### 5) Initialise your application state
+
+```js
+baconify(initialState, store, reducers, (props) => {
   ReactDOM.render(<App {...props} />, document.getElementById('app'));
 });
 ```
@@ -85,7 +91,7 @@ Side effects allow your application to interact with the outside world, i.e.: fe
 
 Unlike reducers, effects are **not** pure functions.
 
-Naturally effects may (and usually do) trigger actions to update the application state.
+Naturally effects may (and usually do) trigger actions to update the application state based on the results of talking to the outside world.
 
 ```js
 export function getUserDetails() {
@@ -117,3 +123,8 @@ export function getUserDetails() {
 I've first used a somewhat similar architecture while at [Fox Sports Australia](https://github.com/FoxSportsAustralia/) and it made perfect sense. This was probably before or at the same time [Redux](http://redux.js.org/) and [MobX](https://mobxjs.github.io/) became popular.
 
 [Matti Lankinen](https://github.com/milankinen) proposes the same idea on his [article on Medium](https://medium.com/@milankinen/good-bye-flux-welcome-bacon-rx-23c71abfb1a7). I've made tweaks and enhancements to this library after some of his comments and ideas.
+
+I've also found a bunch of other posts touching on this approach, here are some of them:
+
+* http://www.aryweb.nl/2015/02/16/Reactive-React-using-reactive-streams/
+* http://blog.hertzen.com/post/102991359167/flux-inspired-reactive-data-flow-using-react-and
