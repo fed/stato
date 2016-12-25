@@ -5,7 +5,7 @@ Reactive state management using [Bacon.js](http://baconjs.github.io/) 🔥
 ## Installation
 
 ```
-npm install --save-dev baconify
+npm install --save baconify
 ```
 
 Then just either import the main `baconify` function, the `Store` class (controlling bus you need to instantiate), or both (depending what you need on each file).
