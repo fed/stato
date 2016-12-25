@@ -1,6 +1,6 @@
 {
   "name": "baconify",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Functional Reactive State Management",
   "main": "src/index.js",
   "scripts": {
