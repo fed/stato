@@ -1,6 +1,6 @@
 # baconify ![Dependencies](https://david-dm.org/fknussel/baconify.svg)
 
-Reactive state management using [Bacon.js](http://baconjs.github.io/) 🔥
+Functional reactive state management library powered by [Bacon.js](http://baconjs.github.io/) 🔥
 
 ## Installation
 
@@ -16,8 +16,7 @@ import baconify, {Store} from 'baconify';
 
 ## Motivation and Proposed Architecture
 
-Just a lil bit of context first *re: functional reactive programming*. The most fundamental concept of [Functional Reactive Programming (FRP)](http://en.wikipedia.org/wiki/Functional_reactive_programming) is the **event stream**. Streams are like (immutable) arrays of events: they can be mapped, 
-filtered, merged and combined. The difference between arrays and event streams is that values (events) of the event stream occur asynchronously. Every time an event occurs, it gets propagated through the stream and finally gets consumed by the subscriber.
+Just a lil bit of context first *re: functional reactive programming*. The most fundamental concept of [Functional Reactive Programming (FRP)](http://en.wikipedia.org/wiki/Functional_reactive_programming) is the **event stream**. Streams are like (immutable) arrays of events: they can be mapped, filtered, merged and combined. The difference between arrays and event streams is that values (events) of the event stream occur asynchronously. Every time an event occurs, it gets propagated through the stream and finally gets consumed by the subscriber.
 
 We have [Flux](https://facebook.github.io/flux/) (and other implementations such as [Redux](http://redux.js.org/) and [MobX](https://mobxjs.github.io/)) to handle our app state, and in fact they do a great job abstracting our views from the *business logic* and keeping our **data flow unidirectional**. However, Reactive programming is what React was made for. So, what if we delegate the app state handling to FRP libraries like [Bacon.js](http://baconjs.github.io/) or [RxJS](http://reactivex.io/rxjs/) instead of using Redux? Well, that actually makes a lot of sense: 
 
@@ -29,7 +28,7 @@ This makes the data flow super simple:
 
 ![Application Architecture](http://i.imgur.com/ButOsvf.png)
 
-The fundamental idea behind this approach is that every user-triggered action gets pushed to the appropriate event stream, which is then merged in to the **application state** stream. Events take place at different points in time, and they cause the application state to change. Finally the updated state triggers a re-render of the root component, and React's virtual DOM takes care of the rest :tada: This results in **dead simple, dumb** React views, mostly powered by **[stateless functional components](https://facebook.github.io/react/docs/components-and-props.html#functional-and-class-components)** in favour of stateful class components (wherever possible).
+The fundamental idea behind this approach is that every user-triggered action gets pushed to the appropriate event stream, which is then merged in to the **application state** stream which is our single source of truth. Events take place at different points in time, and they cause the application state to change. Finally the updated state triggers a re-render of the root component, and React's virtual DOM takes care of the rest :tada: This results in **dead simple, dumb** React views, mostly powered by **[stateless functional components](https://facebook.github.io/react/docs/components-and-props.html#functional-and-class-components)** in favour of stateful class components (wherever possible).
 
 ## TL;DR: Usage Example
 
@@ -119,6 +118,10 @@ export function getUserDetails() {
     });
 }
 ```
+
+## Using Baconify with other View Libraries
+
+Baconify is actually view-layer agnostic, so it can easily be used with any other UI library such as [Vue.js](https://vuejs.org/).
 
 ## Development Tasks
 
