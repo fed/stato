@@ -1,4 +1,4 @@
-# baconify
+# baconify ![Dependencies](https://david-dm.org/fknussel/baconify.svg)
 
 Reactive state management using [Bacon.js](http://baconjs.github.io/) 🔥
 
