@@ -1,5 +1,5 @@
 {
-  "name": "baconify",
+  "name": "stato",
   "version": "1.0.0",
   "description": "Functional Reactive State Management",
   "main": "src/index.js",
@@ -7,27 +7,28 @@
     "clean": "rimraf lib/",
     "eslint": "eslint src/",
     "mkdir": "mkdirp lib/",
-    "browserify": "browserify --debug --standalone baconify -e src/index.js -o lib/baconify.js",
+    "browserify": "browserify --debug --standalone stato -e src/index.js -o lib/stato.js",
     "build": "npm-run-all clean eslint mkdir browserify",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fknussel/baconify.git"
+    "url": "git+https://github.com/fknussel/stato.git"
   },
   "author": {
     "name": "Federico Knüssel",
     "email": "fknussel@gmail.com"
   },
   "keywords": [
-    "baconify",
+    "stato",
+    "functional reactive state management",
     "Bacon.js"
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/fknussel/baconify/issues"
+    "url": "https://github.com/fknussel/stato/issues"
   },
-  "homepage": "https://github.com/fknussel/baconify#readme",
+  "homepage": "https://github.com/fknussel/stato#readme",
   "browserify": {
     "transform": [
       "babelify"

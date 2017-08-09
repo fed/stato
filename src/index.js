@@ -22,8 +22,8 @@ export class Store {
   }
 }
 
-// Baconify: bind Action Creators to Reducers
-export default function baconify(initialState, store, reducers, render) {
+// stato: bind Action Creators to Reducers
+export default function stato(initialState, store, reducers, render) {
   const actionTypes = Object.keys(reducers);
   const boundActions = actionTypes.map((actionType) => {
     return [[store.stream(actionType)], reducers[actionType]];

@@ -1,24 +1,24 @@
-# baconify ![Dependencies](https://david-dm.org/fknussel/baconify.svg)
+# stato ![Dependencies](https://david-dm.org/fknussel/stato.svg)
 
-Functional reactive state management library powered by [Bacon.js](http://baconjs.github.io/) 🔥
+Super simple functional reactive state management library powered by [Bacon.js](http://baconjs.github.io/) 🔥
 
 ## Installation
 
 ```
-npm install --save baconify
+npm install --save stato
 ```
 
-Then just either import the main `baconify` function, the `Store` class (controlling bus you need to instantiate), or both (depending what you need on each file).
+Then just either import the main `stato` function, the `Store` class (controlling bus you need to instantiate), or both (depending what you need on each file).
 
 ```
-import baconify, {Store} from 'baconify';
+import stato, {Store} from 'stato';
 ```
 
 ## Motivation and Proposed Architecture
 
 Just a lil bit of context first *re: functional reactive programming*. The most fundamental concept of [Functional Reactive Programming (FRP)](http://en.wikipedia.org/wiki/Functional_reactive_programming) is the **event stream**. Streams are like (immutable) arrays of events: they can be mapped, filtered, merged and combined. The difference between arrays and event streams is that values (events) of the event stream occur asynchronously. Every time an event occurs, it gets propagated through the stream and finally gets consumed by the subscriber.
 
-We have [Flux](https://facebook.github.io/flux/) (and other implementations such as [Redux](http://redux.js.org/) and [MobX](https://mobxjs.github.io/)) to handle our app state, and in fact they do a great job abstracting our views from the *business logic* and keeping our **data flow unidirectional**. However, Reactive programming is what React was made for. So, what if we delegate the app state handling to FRP libraries like [Bacon.js](http://baconjs.github.io/) or [RxJS](http://reactivex.io/rxjs/) instead of using Redux? Well, that actually makes a lot of sense: 
+We have [Flux](https://facebook.github.io/flux/) and other implementations such as [Redux](http://redux.js.org/) and [MobX](https://mobxjs.github.io/) to handle our app state, and in fact they do a great job abstracting our views from the *business logic* and keeping our **data flow unidirectional**. However, Reactive programming is what React was made for. So, what if we delegate the app state handling to FRP libraries like [Bacon.js](http://baconjs.github.io/) or [RxJS](http://reactivex.io/rxjs/)? Well, that actually makes a lot of sense: 
 
 1. Actions happen eventually and they propagate through event streams.
 2. The combination of these event streams result in the app's state.
@@ -32,14 +32,14 @@ The fundamental idea behind this approach is that every user-triggered action ge
 
 ## TL;DR: Usage Example
 
-Have a look at this [example](https://github.com/fknussel/baconify-example).
+Have a look at this [example](https://github.com/fknussel/stato-example).
 
 ## Quick Start Guide
 
 ### 1) Define your **action types**
 
 ```js
-export const SHOW_SPINNER = 'SHOW_SPINNER';
+export const SHOW_SPINNER = 'SPINNER/SHOW';
 ```
 
 I usually define all actions within a single file for convenience.
@@ -53,16 +53,16 @@ I usually define all actions within a single file for convenience.
 ```js
 export default {
   [SHOW_SPINNER]: (state) => {
-    return assign({}, state, { loading: true });
+    return Object.assign({}, state, { loading: true });
   },
 
   [HIDE_SPINNER]: (state) => {
-    return assign({}, state, { loading: false });
+    return Object.assign({}, state, { loading: false });
   }
 }
 ```
 
-Of course reducers don't need to be inline functions, you can define them elsewhere and then bind them together in the format Baconify needs them to be, something in the lines of this chunk of code... But this is totally up to you and depends on your preferred code style.
+Of course reducers don't need to be inline functions, you can define them elsewhere and then bind them together in the format stato needs them to be, something in the lines of this chunk of code... But this is totally up to you and depends on your preferred code style.
 
 ```js
 export default {
@@ -88,8 +88,11 @@ const store = new Store();
 ### 5) Initialise your application state
 
 ```js
-baconify(initialState, store, reducers, (props) => {
-  ReactDOM.render(<App {...props} />, document.getElementById('app'));
+stato(initialState, store, reducers, (props) => {
+  ReactDOM.render(
+    <App {...props} />,
+    document.getElementById('app')
+  );
 });
 ```
 
@@ -119,9 +122,9 @@ export function getUserDetails() {
 }
 ```
 
-## Using Baconify with other View Libraries
+## Using stato with other view libraries
 
-Baconify is actually view-layer agnostic, so it can easily be used with any other UI library such as [Vue.js](https://vuejs.org/).
+stato is actually view-layer agnostic, so it can easily be used with any other UI library such as [Preact](https://preactjs.com/) or [Vue.js](https://vuejs.org/).
 
 ## Development Tasks
 
@@ -129,7 +132,7 @@ Baconify is actually view-layer agnostic, so it can easily be used with any othe
 |---------|-------------|
 | `npm install` | Fetch dependencies and build binaries for any of the modules |
 | `npm run clean` | Remove `lib` directory |
-| `npm run build` | Build `lib/baconify.js` file |
+| `npm run build` | Build `lib/stato.js` file |
 | `npm test` | Run test suite |
 
 ## Complementary Readings, Inspiration and Credits
