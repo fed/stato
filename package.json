@@ -2,7 +2,7 @@
   "name": "stato",
   "version": "1.0.1",
   "description": "Functional Reactive State Management",
-  "main": "src/index.js",
+  "main": "lib/index.js",
   "scripts": {
     "clean": "rimraf lib/",
     "eslint": "eslint src/",
