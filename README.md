@@ -1,9 +1,10 @@
-# stato ![Dependencies](https://david-dm.org/fknussel/stato.svg)
+# stato
 
 [![Travis](https://img.shields.io/travis/fknussel/stato.svg)](https://travis-ci.org/fknussel/stato)
 [![npm](https://img.shields.io/npm/v/stato.svg)](https://www.npmjs.com/package/stato)
 [![npm](https://img.shields.io/npm/l/stato.svg)](https://github.com/fknussel/stato/blob/master/LICENSE.md)
 [![npm](https://img.shields.io/npm/dm/localeval.svg)](https://www.npmjs.com/package/stato)
+[![David](https://img.shields.io/david/fknussel/stato.svg)](https://github.com/fknussel/stato)
 
 Super simple functional reactive state management library powered by [Bacon.js](http://baconjs.github.io/) 🔥
 
@@ -13,7 +14,7 @@ Super simple functional reactive state management library powered by [Bacon.js](
 # npm
 npm install stato
 
-#yarn
+# yarn
 yarn add stato
 ```
 
@@ -61,12 +62,12 @@ I usually define all actions within a single file for convenience.
 
 ```js
 export default {
-  [SHOW_SPINNER]: (state) => (
+  [SHOW_SPINNER]: state => (
     ...state,
     loading: true
   ),
 
-  [HIDE_SPINNER]: (state) => (
+  [HIDE_SPINNER]: state => (
     ...state,
     loading: false
   )
@@ -91,6 +92,8 @@ const initialState = {
 ```
 
 ### 4) Instantiate your store
+
+Make sure to pass in your reducer object plus the initial state for the application.
 
 ```js
 const store = new Store(reducers, initialState);
