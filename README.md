@@ -3,7 +3,7 @@
 [![Travis](https://img.shields.io/travis/fknussel/stato.svg)](https://travis-ci.org/fknussel/stato)
 [![npm](https://img.shields.io/npm/v/stato.svg)](https://www.npmjs.com/package/stato)
 [![npm](https://img.shields.io/npm/l/stato.svg)](https://github.com/fknussel/stato/blob/master/LICENSE.md)
-[![npm](https://img.shields.io/npm/dm/localeval.svg)](https://www.npmjs.com/package/stato)
+[![npm](https://img.shields.io/npm/dm/stato.svg)](https://www.npmjs.com/package/stato)
 [![David](https://img.shields.io/david/fknussel/stato.svg)](https://github.com/fknussel/stato)
 
 Super simple functional reactive state management library powered by [Bacon.js](http://baconjs.github.io/) 🔥
