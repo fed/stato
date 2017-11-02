@@ -1,10 +1,15 @@
 import Bacon from 'baconjs';
-import flatten from 'lodash/flatten';
+import flatten from 'lodash/flatten'; // @TODO: remove dep
 
 // Store
 const _busCache = {};
 
-export class Store {
+export default class Store {
+  constructor(reducers, initialState) {
+    this.reducers = reducers;
+    this.initialState = initialState;
+  }
+
   stream(name) {
     return this.bus(name);
   }
@@ -20,19 +25,22 @@ export class Store {
   bus(name) {
     return _busCache[name] = _busCache[name] || new Bacon.Bus();
   }
-}
 
-// stato: bind Action Creators to Reducers
-export default function stato(initialState, store, reducers, render) {
-  const actionTypes = Object.keys(reducers);
-  const boundActions = actionTypes.map((actionType) => {
-    return [[store.stream(actionType)], reducers[actionType]];
-  });
+  // bind Action Creators to Reducers and subscribe to changes
+  subscribe(cb) {
+    const actionTypes = Object.keys(this.reducers);
+    const boundActions = actionTypes.map(actionType => [
+      [this.stream(actionType)], this.reducers[actionType]
+    ]);
 
-  return Bacon
-    .update(
-      initialState,
-      ...flatten(boundActions)
-    )
-    .onValue((appState) => render(appState));
+    // @TODO: instead of using initial state, force the reducers to run once
+    // and read data from the store = initial state
+    // merge it with another stream to emit once and instantly
+    return Bacon
+      .update(this.initialState, ...flatten(boundActions))
+      .onValue(state => {
+        console.log('state', state);
+        cb(state);
+      });
+  }
 }

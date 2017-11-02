@@ -1,11 +1,11 @@
 import babel from 'rollup-plugin-babel';
 import uglify from 'rollup-plugin-uglify';
+
 export default {
   input: 'src/index.js',
   output: {
     file: 'lib/stato.js',
-    format: 'cjs',
-    exports: 'named' // @TODO: Remove when exporting a single module
+    format: 'cjs'
   },
   sourcemap: true,
   external: [
