@@ -1,12 +1,20 @@
 # stato ![Dependencies](https://david-dm.org/fknussel/stato.svg)
 
+[![Travis](https://img.shields.io/travis/fknussel/stato.svg)](https://travis-ci.org/fknussel/stato)
+[![npm](https://img.shields.io/npm/v/stato.svg)](https://www.npmjs.com/package/stato)
+[![npm](https://img.shields.io/npm/l/stato.svg)](https://github.com/fknussel/stato/blob/master/LICENSE.md)
+[![npm](https://img.shields.io/npm/dm/localeval.svg)](https://www.npmjs.com/package/stato)
+
 Super simple functional reactive state management library powered by [Bacon.js](http://baconjs.github.io/) 🔥
 
 ## Installation
 
 ```
-npm install stato # npm
-yarn add stato # yarn
+# npm
+npm install stato
+
+#yarn
+yarn add stato
 ```
 
 Then just import the main `Store` class (aka: function constructor) which is the controlling bus you need to instantiate.
