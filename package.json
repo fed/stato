@@ -2,14 +2,14 @@
   "name": "stato",
   "version": "1.0.1",
   "description": "Functional Reactive State Management",
-  "main": "lib/index.js",
+  "main": "lib/stato.js",
   "scripts": {
     "clean": "rimraf lib/",
-    "eslint": "eslint src/",
     "mkdir": "mkdirp lib/",
-    "browserify": "browserify --debug --standalone stato -e src/index.js -o lib/stato.js",
-    "build": "npm-run-all clean eslint mkdir browserify",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "eslint": "eslint src/",
+    "rollup": "rollup --config",
+    "build": "npm-run-all clean eslint mkdir rollup",
+    "test": "echo \"Error: no test specified\""
   },
   "repository": {
     "type": "git",
@@ -29,26 +29,25 @@
     "url": "https://github.com/fknussel/stato/issues"
   },
   "homepage": "https://github.com/fknussel/stato#readme",
-  "browserify": {
-    "transform": [
-      "babelify"
-    ]
-  },
   "dependencies": {
-    "babel-preset-es2015": "^6.18.0",
-    "babelify": "^7.3.0",
+    "baconjs": "^0.7.89",
     "lodash": "^4.17.3"
   },
   "devDependencies": {
-    "babel-eslint": "^7.1.1",
-    "baconjs": "^0.7.89",
-    "browserify": "^13.1.1",
-    "eslint": "^3.12.2",
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^8.0.1",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.10.0",
     "mkdirp": "^0.5.1",
-    "npm-run-all": "^3.1.2",
-    "rimraf": "^2.5.4"
+    "npm-run-all": "^4.1.1",
+    "rimraf": "^2.5.4",
+    "rollup": "^0.50.0",
+    "rollup-plugin-babel": "^3.0.2",
+    "rollup-plugin-uglify": "^2.0.1"
   },
   "peerDependencies": {
-    "baconjs": "^0.7.89"
+    "baconjs": "^0.7.89",
+    "lodash": "^4.17.3"
   }
 }
