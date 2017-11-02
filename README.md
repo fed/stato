@@ -5,20 +5,21 @@ Super simple functional reactive state management library powered by [Bacon.js](
 ## Installation
 
 ```
-npm install --save stato
+npm install stato # npm
+yarn add stato # yarn
 ```
 
-Then just either import the main `stato` function, the `Store` class (controlling bus you need to instantiate), or both (depending what you need on each file).
+Then just import the main `Store` class (aka: function constructor) which is the controlling bus you need to instantiate.
 
 ```
-import stato, {Store} from 'stato';
+import Store from 'stato';
 ```
 
 ## Motivation and Proposed Architecture
 
 Just a lil bit of context first *re: functional reactive programming*. The most fundamental concept of [Functional Reactive Programming (FRP)](http://en.wikipedia.org/wiki/Functional_reactive_programming) is the **event stream**. Streams are like (immutable) arrays of events: they can be mapped, filtered, merged and combined. The difference between arrays and event streams is that values (events) of the event stream occur asynchronously. Every time an event occurs, it gets propagated through the stream and finally gets consumed by the subscriber.
 
-We have [Flux](https://facebook.github.io/flux/) and other implementations such as [Redux](http://redux.js.org/) and [MobX](https://mobxjs.github.io/) to handle our app state, and in fact they do a great job abstracting our views from the *business logic* and keeping our **data flow unidirectional**. However, Reactive programming is what React was made for. So, what if we delegate the app state handling to FRP libraries like [Bacon.js](http://baconjs.github.io/) or [RxJS](http://reactivex.io/rxjs/)? Well, that actually makes a lot of sense: 
+We have [Flux](https://facebook.github.io/flux/) and other implementations such as [Redux](http://redux.js.org/) and [MobX](https://mobxjs.github.io/) to handle our app state, and in fact they do a great job abstracting our views from the *business logic* and keeping our **data flow unidirectional**. However, Reactive programming is what React was made for. So, what if we delegate the app state handling to FRP libraries like [Bacon.js](http://baconjs.github.io/) or [RxJS](http://reactivex.io/rxjs/)? Well, that actually makes a lot of sense:
 
 1. Actions happen eventually and they propagate through event streams.
 2. The combination of these event streams result in the app's state.
@@ -52,17 +53,19 @@ I usually define all actions within a single file for convenience.
 
 ```js
 export default {
-  [SHOW_SPINNER]: (state) => {
-    return Object.assign({}, state, { loading: true });
-  },
+  [SHOW_SPINNER]: (state) => (
+    ...state,
+    loading: true
+  ),
 
-  [HIDE_SPINNER]: (state) => {
-    return Object.assign({}, state, { loading: false });
-  }
+  [HIDE_SPINNER]: (state) => (
+    ...state,
+    loading: false
+  )
 }
 ```
 
-Of course reducers don't need to be inline functions, you can define them elsewhere and then bind them together in the format stato needs them to be, something in the lines of this chunk of code... But this is totally up to you and depends on your preferred code style.
+Of course reducers don't need to be inline functions, you can define them elsewhere and then bind them together in the format stato needs them to be in, something along the lines of this chunk of code... But this is totally up to you and depends on your preferred code style.
 
 ```js
 export default {
@@ -82,16 +85,16 @@ const initialState = {
 ### 4) Instantiate your store
 
 ```js
-const store = new Store();
+const store = new Store(reducers, initialState);
 ```
 
 ### 5) Initialise your application state
 
 ```js
-stato(initialState, store, reducers, (props) => {
+store.subscribe(props => {
   ReactDOM.render(
     <App {...props} />,
-    document.getElementById('app')
+    document.getElementById('root')
   );
 });
 ```
@@ -109,7 +112,7 @@ For instance, consider this effect called `getUserDetails` that fetches a list o
 ```js
 export function getUserDetails() {
   store.push(SHOW_SPINNER); // triggers an action
-  
+
   const ajaxCall = fetch('//api.github.com/users/fknussel')
     .then((response) => response.json());
 
@@ -130,10 +133,10 @@ stato is actually view-layer agnostic, so it can easily be used with any other U
 
 | Command | Description |
 |---------|-------------|
-| `npm install` | Fetch dependencies and build binaries for any of the modules |
-| `npm run clean` | Remove `lib` directory |
-| `npm run build` | Build `lib/stato.js` file |
-| `npm test` | Run test suite |
+| `yarn install` | Fetch dependencies and build binaries for any of the modules |
+| `yarn clean` | Remove `lib` directory |
+| `yarn build` | Build `lib/stato.js` file |
+| `yarn test` | Run test suite |
 
 ## Complementary Readings, Inspiration and Credits
 
