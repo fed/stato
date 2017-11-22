@@ -6,7 +6,7 @@
 [![npm](https://img.shields.io/npm/dm/stato.svg)](https://www.npmjs.com/package/stato)
 [![David](https://img.shields.io/david/fknussel/stato.svg)](https://github.com/fknussel/stato)
 
-Super simple functional reactive state management library powered by [Bacon.js](http://baconjs.github.io/) 🔥
+Super simple, opinionated functional reactive state management library powered by [Bacon.js](http://baconjs.github.io/) 🔥
 
 ## Installation
 
@@ -24,25 +24,14 @@ Then just import the main `Store` class (aka: function constructor) which is the
 import Store from 'stato';
 ```
 
-## Motivation and Proposed Architecture
+## Development Tasks
 
-Just a lil bit of context first *re: functional reactive programming*. The most fundamental concept of [Functional Reactive Programming (FRP)](http://en.wikipedia.org/wiki/Functional_reactive_programming) is the **event stream**. Streams are like (immutable) arrays of events: they can be mapped, filtered, merged and combined. The difference between arrays and event streams is that values (events) of the event stream occur asynchronously. Every time an event occurs, it gets propagated through the stream and finally gets consumed by the subscriber.
-
-We have [Flux](https://facebook.github.io/flux/) and other implementations such as [Redux](http://redux.js.org/) and [MobX](https://mobxjs.github.io/) to handle our app state, and in fact they do a great job abstracting our views from the *business logic* and keeping our **data flow unidirectional**. However, Reactive programming is what React was made for. So, what if we delegate the app state handling to FRP libraries like [Bacon.js](http://baconjs.github.io/) or [RxJS](http://reactivex.io/rxjs/)? Well, that actually makes a lot of sense:
-
-1. Actions happen eventually and they propagate through event streams.
-2. The combination of these event streams result in the app's state.
-3. After an event has propagated through the system, the new state is consumed by the subscriber and rendered by the **root level** React component.
-
-This makes the data flow super simple:
-
-![Application Architecture](http://i.imgur.com/ButOsvf.png)
-
-The fundamental idea behind this approach is that every user-triggered action gets pushed to the appropriate event stream, which is then merged in to the **application state** stream which is our single source of truth. Events take place at different points in time, and they cause the application state to change. Finally the updated state triggers a re-render of the root component, and React's virtual DOM takes care of the rest :tada: This results in **dead simple, dumb** React views, mostly powered by **[stateless functional components](https://facebook.github.io/react/docs/components-and-props.html#functional-and-class-components)** in favour of stateful class components (wherever possible).
-
-## TL;DR: Usage Example
-
-Have a look at this [example](https://github.com/fknussel/stato-example).
+| Command | Description |
+|---------|-------------|
+| `yarn install` | Fetch dependencies and build binaries for any of the modules |
+| `yarn clean` | Remove `lib` directory |
+| `yarn build` | Build `lib/stato.js` file |
+| `yarn test` | Run test suite |
 
 ## Quick Start Guide
 
@@ -110,6 +99,46 @@ store.subscribe(props => {
 });
 ```
 
+## TL;DR: Usage Example
+
+Have a look at this [example](https://github.com/fknussel/stato-example).
+
+## Motivation and Proposed Architecture
+
+Just a lil bit of context first *re: functional reactive programming*. The most fundamental concept of [Functional Reactive Programming (FRP)](http://en.wikipedia.org/wiki/Functional_reactive_programming) is the **event stream**. Streams are like (immutable) arrays of events: they can be mapped, filtered, merged and combined. The difference between arrays and event streams is that values (events) of the event stream occur asynchronously. Every time an event occurs, it gets propagated through the stream and finally gets consumed by the subscriber.
+
+We have [Flux](https://facebook.github.io/flux/) and other implementations such as [Redux](http://redux.js.org/) and [MobX](https://mobxjs.github.io/) to handle our app state, and in fact they do a great job abstracting our views from the *business logic* and keeping our **data flow unidirectional**. However, Reactive programming is what React was made for. So, what if we delegate the app state handling to FRP libraries like [Bacon.js](http://baconjs.github.io/) or [RxJS](http://reactivex.io/rxjs/)? Well, that actually makes a lot of sense:
+
+1. Actions happen eventually and they propagate through event streams.
+2. The combination of these event streams result in the app's state.
+3. After an event has propagated through the system, the new state is consumed by the subscriber and rendered by the **root level** React component.
+
+This makes the data flow super simple:
+
+![Application Architecture](http://i.imgur.com/ButOsvf.png)
+
+The fundamental idea behind this approach is that every user-triggered action gets pushed to the appropriate event stream, which is then merged in to the **application state** stream which is our single source of truth. Events take place at different points in time, and they cause the application state to change. Finally the updated state triggers a re-render of the root component, and React's virtual DOM takes care of the rest :tada: This results in **dead simple, dumb** React views, mostly powered by **[stateless functional components](https://facebook.github.io/react/docs/components-and-props.html#functional-and-class-components)** in favour of stateful class components (wherever possible).
+
+## Triggering actions and the role of the view layer
+
+State changes are only dispatched by actions. It's only throughout actions that we can update our application state.
+
+Actions can be triggered:
+
+* as a response to some user interaction (click on a button, form submission, scroll past the end of the page, etc.)
+* as part of a lifecycle method (request data on componentWillMount). Note that I said "request data" and not "fetch data", that's because we cannot directly fetch data on a lifecycle hook as that's a side effect (talking to a server). We rather call a "request" data action that triggers the network call.
+* as a cron job: as apart of our bootstrapping action we could set a bunch of timers (intervals) to periodically sync us with the server or update the internal state.
+
+The bottom line here is that the View Layer ONLY and EXCLUSIVELY interacts with actions by importing them:
+
+```
+import {logout} from './state/actions';
+```
+
+And this is the only use case for importing files from the `state` directory.
+
+Note that some actions are never used from the UI, for instance `RECEIVE_DATA` gets only triggered by the side effect triggered by `REQUEST_DATA`. The view layer doesn't necessarily need to be concerned with the entirety of the actions.
+
 ## About Side Effects
 
 Side effects allow your application to interact with the outside world, i.e.: fetching data from an API, getting/setting data from/to `localStorage`/`sessionStorage`, talking to a database, etc.
@@ -136,18 +165,40 @@ export function getUserDetails() {
 }
 ```
 
+Note that the user cannot directly trigger a side effect. Actions are the only ones allowed to do this.
+
+Side effects include:
+* API calls
+* Local storage caching
+* Logging, etc.
+
+```
+VIEW (React component) <--------------------|
+	|                                         |
+	| triggers                                |
+	|                                         |
+ACTION --->--causes--->-- SIDE EFFECTS      |
+	|                                         |
+	| invokes, passing data forward           ^
+	|                                         |
+REDUCER                                     |
+	|                                         |
+	| computes next state and updates store   |
+	|                                         |
+STORE ---->----notifies root component -->--|
+```
+
+Based on this, actions are not ALWAYS pure functions as they can trigger side effects. Reducers are, though.
+
 ## Using stato with other view libraries
 
 stato is actually view-layer agnostic, so it can easily be used with any other UI library such as [Preact](https://preactjs.com/) or [Vue.js](https://vuejs.org/).
 
-## Development Tasks
+## TO DO
 
-| Command | Description |
-|---------|-------------|
-| `yarn install` | Fetch dependencies and build binaries for any of the modules |
-| `yarn clean` | Remove `lib` directory |
-| `yarn build` | Build `lib/stato.js` file |
-| `yarn test` | Run test suite |
+* Agree on how to set/define initial state: should it be passed in when creating the store? or should it be set on each particular reducer like Redux does with `combineReducers`? Is it the store the one that should be concerned with the initial state, or reducers ought to?
+* Agree on whether to use context to pass props down (also, the way Redux does) and make it opt-in, or to case case down state from the top most component onto its children no matter how deep the hierarchy tree is. Or both, why not.
+* Rewrite using RxJS.
 
 ## Complementary Readings, Inspiration and Credits
 
