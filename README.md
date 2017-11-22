@@ -174,17 +174,17 @@ Side effects include:
 
 ```
 VIEW (React component) <--------------------|
-	|                                         |
-	| triggers                                |
-	|                                         |
+  |                                         |
+  | triggers                                |
+  |                                         |
 ACTION --->--causes--->-- SIDE EFFECTS      |
-	|                                         |
-	| invokes, passing data forward           ^
-	|                                         |
+  |                                         |
+  | invokes, passing data forward           ^
+  |                                         |
 REDUCER                                     |
-	|                                         |
-	| computes next state and updates store   |
-	|                                         |
+  |                                         |
+  | computes next state and updates store   |
+  |                                         |
 STORE ---->----notifies root component -->--|
 ```
 
