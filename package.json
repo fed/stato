@@ -1,6 +1,6 @@
 {
   "name": "stato",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Functional Reactive State Management",
   "main": "lib/stato.js",
   "scripts": {
@@ -19,7 +19,11 @@
     "name": "Federico Knüssel",
     "email": "fknussel@gmail.com"
   },
-  "keywords": ["stato", "functional reactive state management", "Bacon.js"],
+  "keywords": [
+    "stato",
+    "functional reactive state management",
+    "Bacon.js"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/fknussel/stato/issues"
