@@ -8,10 +8,7 @@ export default {
     format: 'cjs'
   },
   sourcemap: true,
-  external: [
-    'baconjs',
-    'lodash/flatten'
-  ],
+  external: ['baconjs'],
   plugins: [
     babel({
       exclude: 'node_modules/**'

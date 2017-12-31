@@ -19,35 +19,29 @@
     "name": "Federico Knüssel",
     "email": "fknussel@gmail.com"
   },
-  "keywords": [
-    "stato",
-    "functional reactive state management",
-    "Bacon.js"
-  ],
+  "keywords": ["stato", "functional reactive state management", "Bacon.js"],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/fknussel/stato/issues"
   },
   "homepage": "https://github.com/fknussel/stato#readme",
   "dependencies": {
-    "baconjs": "^0.7.95",
     "lodash": "^4.17.4"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
-    "babel-eslint": "^8.0.1",
+    "babel-eslint": "^8.1.2",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-preset-env": "^1.6.1",
-    "eslint": "^4.10.0",
+    "eslint": "^4.14.0",
     "mkdirp": "^0.5.1",
-    "npm-run-all": "^4.1.1",
+    "npm-run-all": "^4.1.2",
     "rimraf": "^2.5.4",
-    "rollup": "^0.50.0",
-    "rollup-plugin-babel": "^3.0.2",
+    "rollup": "^0.53.2",
+    "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-uglify": "^2.0.1"
   },
   "peerDependencies": {
-    "baconjs": "^0.7.95",
-    "lodash": "^4.17.4"
+    "baconjs": "^1.0.1"
   }
 }

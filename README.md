@@ -24,6 +24,10 @@ Then just import the main `Store` class (aka: function constructor) which is the
 import Store from 'stato';
 ```
 
+## Peer dependencies
+
+This library depends on `baconjs@^1.0.0`, so make sure you have Bacon.js installed and listed as a dependency on your project.
+
 ## Development Tasks
 
 | Command | Description |
@@ -196,9 +200,8 @@ stato is actually view-layer agnostic, so it can easily be used with any other U
 
 ## TO DO
 
-* Agree on how to set/define initial state: should it be passed in when creating the store? or should it be set on each particular reducer like Redux does with `combineReducers`? Is it the store the one that should be concerned with the initial state, or reducers ought to?
-* Agree on whether to use context to pass props down (also, the way Redux does) and make it opt-in, or to case case down state from the top most component onto its children no matter how deep the hierarchy tree is. Or both, why not.
-* Rewrite using RxJS.
+- [ ] Agree on how to set/define initial state: should it be passed in when creating the store? or should it be set on each particular reducer like Redux does with `combineReducers`? Is it the store the one that should be concerned with the initial state, or reducers ought to?
+- [ ] Find a way to "connect" children components to avoid cascading props all the way down. Probably follow the Redux way via `Provider` and `connect`.
 
 ## Complementary Readings, Inspiration and Credits
 
